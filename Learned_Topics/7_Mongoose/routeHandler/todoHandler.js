@@ -98,8 +98,16 @@ router.put('/:id',(req,res)=>{
 })
 
 router.delete('/:id',(req,res)=>{
-    
-    
+    const query = {
+        _id : req.params.id
+     }
+         todo.deleteOne(query)
+         .then(todos=>{
+             res.json("deleted")
+         })
+         .catch(err=>{
+             res.send("failed")
+         })
 })
 
 module.exports = router;
