@@ -5,11 +5,9 @@ const e = require('express');
 const router = express.Router();
 const todo = new mongoose.model('todo',todoSchema);
 
-
 //Get all todos by query url
 router.get('/',(req,res)=>{
-
-        const query = req.query;
+     const query = req.query;
         const ignore = {
             date:0,
         }
@@ -24,6 +22,19 @@ router.get('/',(req,res)=>{
                      
 })
 
+//Get element by instance fucntion
+router.get('/active',async (req,res)=>{
+    const newTodo = new todo();
+    const data = await newTodo.findActive();
+    res.send(data);
+})
+
+//Get element by static fucntion
+router.get('/static',async (req,res)=>{
+    const data = await todo.findByJs();
+    res.send(data);
+})
+
 //Get single todo by params
 router.get('/:id',(req,res)=>{
     const query = {
@@ -31,13 +42,15 @@ router.get('/:id',(req,res)=>{
     }
         todo.find(query)
         .then(todos=>{
-            res.json(todos)
+            res.send(todos)
         })
         .catch(err=>{
             res.send("failed")
         })
 })
 
+
+//create
 router.post('/',(req,res)=>{
     const newTodo = new todo(req.body);
     console.log(req.body);
@@ -57,6 +70,7 @@ router.post('/',(req,res)=>{
     
 })
 
+//create
 router.post('/all',(req,res)=>{
     const newTodo = req.body;
     console.log(req.body);
